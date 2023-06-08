@@ -133,13 +133,15 @@ At the end, the project should have:
 ## Plan of Actions
 
 - Check Database Structure
-    - [ ] Models
-    - [ ] Migrations
-    - [ ] Factories
-    - [ ] Seeders
+    - [x] Models
+    - [x] Migrations
+    - [x] Factories
+    - [x] Seeders
 - Model Operations
+    - [ ] Router
     - [ ] CRUD
 - Auth Security
+    - [ ] Login
     - [ ] Role related
 
 ## License
