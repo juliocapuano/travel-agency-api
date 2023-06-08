@@ -46,7 +46,7 @@ trait GenerateSlug
     {
         $is_dirty = $model->isDirty($title_field);
         if ($is_dirty) {
-            $title              = sprintf('%s %s', $model->$title_field, time());
+            $title              = sprintf('%s %s', $model->$title_field, Str::random(6));
             $model->$slug_field = Str::slug($title);
         }
     }

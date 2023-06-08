@@ -27,8 +27,15 @@ class Travel extends Model
         'number_of_days' => 'integer',
     ];
 
+    protected $appends = ['number_of_nights'];
+
     public function tours(): HasMany
     {
         return $this->hasMany(Tour::class);
+    }
+
+    public function getNumberOfNightsAttribute()
+    {
+        return $this->number_of_days - 1;
     }
 }
