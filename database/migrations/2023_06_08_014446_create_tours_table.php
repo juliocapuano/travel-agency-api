@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Schema;
 return new class() extends Migration {
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tours', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('travel_id')->constrained();
 
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->timestamp('starting_date');
+            $table->timestamp('ending_date');
+            $table->integer('price');
 
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class() extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tours');
     }
 };
