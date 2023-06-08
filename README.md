@@ -7,13 +7,13 @@ Laravel APIs application for a travel agency.
 Clone the repository:
 
 ```bash
-git clone https://github.com/username/project.git
+git clone https://github.com/juliocapuano/travel-agency-api.git
 ```
 
 Change into the project directory:
 
 ```bash
-cd project
+cd travel-agency-api
 ```
 
 Install the dependencies:
@@ -40,6 +40,16 @@ Run the database migrations:
 
 ```bash
 php artisan migrate
+```
+
+Seed the database:
+
+```bash
+# required
+php artisan db:seed
+
+# optional | demo data  
+php artisan db:seed DemoDataSeeder
 ```
 
 Start the development server:
