@@ -39,4 +39,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->roles()->where('name', $role)->count() > 0;
+    }
+
+    public function hasAnyOfRoles(array $roles): bool
+    {
+        return $this->roles()->whereIn('name', $roles)->count() > 0;
+    }
 }
