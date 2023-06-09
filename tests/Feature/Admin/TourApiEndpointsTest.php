@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Models\Tour;
 use App\Models\Travel;
@@ -21,6 +21,9 @@ class TourApiEndpointsTest extends TestCase
 
         (new DatabaseSeeder())->run();
 
+        $token = \App\Models\User::first()->createToken(get_class($this))->plainTextToken;
+        $this->withToken($token);
+
         $this->test_travel = Travel::factory()->create();
     }
 
@@ -30,7 +33,7 @@ class TourApiEndpointsTest extends TestCase
         Tour::factory(25)->create(['travel_id' => $this->test_travel->id]);
 
         $db_count = $this->test_travel->tours()->count();
-        $response = $this->get(route('travels.tours.index', $this->test_travel));
+        $response = $this->get(route('secure.travels.tours.index', $this->test_travel));
 
         $response->assertOk();
         $response->assertJsonCount($db_count);
@@ -48,7 +51,7 @@ class TourApiEndpointsTest extends TestCase
         $this->assertNull(Tour::find($payload->id)); // not in db
 
         $response = $this->post(
-            route('travels.tours.store', $this->test_travel),
+            route('secure.travels.tours.store', $this->test_travel),
             (array)$payload->toArray()
         );
 
@@ -63,7 +66,7 @@ class TourApiEndpointsTest extends TestCase
 
         $this->assertNotNull(Tour::find($payload->id)); // in db
 
-        $response = $this->get(route('travels.tours.show', [$this->test_travel, $payload]));
+        $response = $this->get(route('secure.travels.tours.show', [$this->test_travel, $payload]));
 
         $response->assertOk();
         $response->assertJsonFragment($payload->only('name'));
@@ -85,7 +88,7 @@ class TourApiEndpointsTest extends TestCase
 
         $modified_payload = $payload->fill($replace->only($keys));
 
-        $response = $this->put(route('travels.tours.update', [$this->test_travel, $payload]), $modified_payload->toArray());
+        $response = $this->put(route('secure.travels.tours.update', [$this->test_travel, $payload]), $modified_payload->toArray());
 
         $response->assertAccepted();
         $response->assertJsonFragment($modified_payload->only($keys));
@@ -98,7 +101,7 @@ class TourApiEndpointsTest extends TestCase
 
         $this->assertNotNull(Tour::find($payload->id)); // in db
 
-        $response = $this->delete(route('travels.tours.destroy', [$this->test_travel, $payload]));
+        $response = $this->delete(route('secure.travels.tours.destroy', [$this->test_travel, $payload]));
 
         $response->assertNoContent();
     }

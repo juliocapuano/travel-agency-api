@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Travel;
@@ -14,9 +14,7 @@ class TravelController extends Controller
 
     public function index()
     {
-        $travels = Travel::whereIsPublic(true)
-            ->orderBy('created_at')
-            ->get();
+        $travels = Travel::get();
 
         return \Response::json($travels);
     }

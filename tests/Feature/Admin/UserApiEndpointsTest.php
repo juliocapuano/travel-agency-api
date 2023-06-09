@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
@@ -17,6 +17,9 @@ class UserApiEndpointsTest extends TestCase
         parent::setUp();
 
         (new DatabaseSeeder())->run(); // run seeder
+
+        $token = \App\Models\User::first()->createToken(get_class($this))->plainTextToken;
+        $this->withToken($token);
     }
 
     /** @test */
@@ -25,7 +28,7 @@ class UserApiEndpointsTest extends TestCase
         User::factory(25)->create();
 
         $db_count = User::count();
-        $response = $this->get(route('users.index'));
+        $response = $this->get(route('secure.users.index'));
 
         $response->assertOk();
         $response->assertJsonCount($db_count);
@@ -41,7 +44,7 @@ class UserApiEndpointsTest extends TestCase
 
         $payload = $payload->only('name', 'email');
 
-        $response = $this->post(route('users.store'), [
+        $response = $this->post(route('secure.users.store'), [
             ...$payload,
             'password' => Str::random(12) . '@',
             'roles'    => ['admin'],
@@ -58,7 +61,7 @@ class UserApiEndpointsTest extends TestCase
 
         $this->assertNotNull(User::find($payload->id)); // in db
 
-        $response = $this->get(route('users.show', $payload));
+        $response = $this->get(route('secure.users.show', $payload));
 
         $response->assertOk();
         $response->assertJsonFragment($payload->toArray());
@@ -77,7 +80,7 @@ class UserApiEndpointsTest extends TestCase
 
         $modified_payload = $payload->fill($replace->only($keys));
 
-        $response = $this->put(route('users.update', $payload), $modified_payload->toArray());
+        $response = $this->put(route('secure.users.update', $payload), $modified_payload->toArray());
 
         $response->assertAccepted();
         $response->assertJsonFragment($modified_payload->only($keys));
@@ -90,7 +93,7 @@ class UserApiEndpointsTest extends TestCase
 
         $this->assertNotNull(User::find($payload->id)); // in db
 
-        $response = $this->delete(route('users.destroy', $payload));
+        $response = $this->delete(route('secure.users.destroy', $payload));
 
         $response->assertNoContent();
     }

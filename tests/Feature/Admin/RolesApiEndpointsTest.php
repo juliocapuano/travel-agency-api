@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Models\Role;
 use Database\Seeders\DatabaseSeeder;
@@ -16,6 +16,9 @@ class RolesApiEndpointsTest extends TestCase
         parent::setUp();
 
         (new DatabaseSeeder())->run(); // run seeder
+
+        $token = \App\Models\User::first()->createToken(get_class($this))->plainTextToken;
+        $this->withToken($token);
     }
 
     /** @test */
@@ -24,7 +27,7 @@ class RolesApiEndpointsTest extends TestCase
         Role::factory(25)->create();
 
         $db_count = Role::count();
-        $response = $this->get(route('roles.index'));
+        $response = $this->get(route('secure.roles.index'));
 
         $response->assertOk();
         $response->assertJsonCount($db_count);
@@ -40,7 +43,7 @@ class RolesApiEndpointsTest extends TestCase
 
         $payload = $payload->only('name');
 
-        $response = $this->post(route('roles.store'), $payload);
+        $response = $this->post(route('secure.roles.store'), $payload);
 
         $response->assertCreated();
         $response->assertJsonFragment($payload);
@@ -53,7 +56,7 @@ class RolesApiEndpointsTest extends TestCase
 
         $this->assertNotNull(Role::find($payload->id)); // in db
 
-        $response = $this->get(route('roles.show', $payload));
+        $response = $this->get(route('secure.roles.show', $payload));
 
         $response->assertOk();
         $response->assertJsonFragment($payload->toArray());
@@ -72,7 +75,7 @@ class RolesApiEndpointsTest extends TestCase
 
         $modified_payload = $payload->fill($replace->only($keys));
 
-        $response = $this->put(route('roles.update', $payload), $modified_payload->toArray());
+        $response = $this->put(route('secure.roles.update', $payload), $modified_payload->toArray());
 
         $response->assertAccepted();
         $response->assertJsonFragment($modified_payload->only($keys));
@@ -85,7 +88,7 @@ class RolesApiEndpointsTest extends TestCase
 
         $this->assertNotNull(Role::find($payload->id)); // in db
 
-        $response = $this->delete(route('roles.destroy', $payload));
+        $response = $this->delete(route('secure.roles.destroy', $payload));
 
         $response->assertNoContent();
     }

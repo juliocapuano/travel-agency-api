@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $roles = Role::all();
@@ -18,9 +15,6 @@ class RoleController extends Controller
         return \Response::json($roles);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $valid_data = $request->validate([
@@ -32,17 +26,11 @@ class RoleController extends Controller
         return \Response::json($role, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Role $role)
     {
         return \Response::json($role);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Role $role)
     {
         $valid_data = $request->validate([
@@ -54,9 +42,6 @@ class RoleController extends Controller
         return \Response::json($role, 202);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Role $role)
     {
         $count = $role->users()->count();
