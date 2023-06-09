@@ -138,8 +138,8 @@ At the end, the project should have:
     - [x] Factories
     - [x] Seeders
 - Model Operations
-    - [ ] Router
-    - [ ] CRUD
+    - [x] Router
+    - [x] CRUD
 - Auth Security
     - [ ] Login
     - [ ] Role related
